@@ -5,10 +5,8 @@ import psycopg2.extras
 import os
 from datetime import datetime, timedelta
 import json
-from dotenv import load_dotenv
-
-# Carregar variáveis de ambiente
-load_dotenv()
+import sys
+import traceback
 
 app = Flask(__name__, 
             static_folder='static',
@@ -16,27 +14,50 @@ app = Flask(__name__,
 CORS(app)
 
 # ============ CONFIGURAÇÕES DO BANCO ============
-DB_HOST = os.environ.get("DB_HOST", "db.olrswumpeunhstuwnhbu.supabase.co")
-DB_PORT = os.environ.get("DB_PORT", "5432")
-DB_NAME = os.environ.get("DB_NAME", "postgres")
-DB_USER = os.environ.get("DB_USER", "postgres")
-DB_PASSWORD = os.environ.get("DB_PASSWORD", "qcUDE8t8kxRsLDBu")
+# Tentar várias formas de obter as variáveis
+DB_HOST = os.environ.get("DB_HOST") or os.environ.get("SUPABASE_DB_HOST") or "db.olrswumpeunhstuwnhbu.supabase.co"
+DB_PORT = os.environ.get("DB_PORT") or os.environ.get("SUPABASE_DB_PORT") or "5432"
+DB_NAME = os.environ.get("DB_NAME") or os.environ.get("SUPABASE_DB_NAME") or "postgres"
+DB_USER = os.environ.get("DB_USER") or os.environ.get("SUPABASE_DB_USER") or "postgres"
+DB_PASSWORD = os.environ.get("DB_PASSWORD") or os.environ.get("SUPABASE_DB_PASSWORD") or "qcUDE8t8kxRsLDBu"
+
+# Tentar usar DATABASE_URL se disponível
+DATABASE_URL = os.environ.get("DATABASE_URL")
+
+print(f"🔌 Configurações do banco:")
+print(f"  Host: {DB_HOST}")
+print(f"  Port: {DB_PORT}")
+print(f"  Database: {DB_NAME}")
+print(f"  User: {DB_USER}")
+print(f"  Password: {'*' * len(DB_PASSWORD) if DB_PASSWORD else 'NÃO DEFINIDA'}")
 
 # ============ FUNÇÃO DE CONEXÃO ============
 def get_db_connection():
     """Cria e retorna uma conexão com o banco de dados"""
     try:
+        # Tentar usar DATABASE_URL primeiro
+        if DATABASE_URL:
+            print(f"🔌 Tentando conectar via DATABASE_URL...")
+            conn = psycopg2.connect(DATABASE_URL, connect_timeout=10)
+            print("✅ Conexão via DATABASE_URL bem sucedida!")
+            return conn
+        
+        # Fallback para parâmetros individuais
+        print(f"🔌 Tentando conectar via parâmetros individuais...")
         conn = psycopg2.connect(
             host=DB_HOST,
             port=DB_PORT,
             database=DB_NAME,
             user=DB_USER,
             password=DB_PASSWORD,
-            connect_timeout=10
+            connect_timeout=10,
+            sslmode='require'  # Importante para Supabase
         )
+        print("✅ Conexão via parâmetros bem sucedida!")
         return conn
     except Exception as e:
         print(f"❌ Erro ao conectar ao banco: {str(e)}")
+        print(f"❌ Detalhes: {traceback.format_exc()}")
         return None
 
 # ============ ROTAS ============
@@ -46,12 +67,22 @@ def admin():
     """Dashboard administrativo"""
     return render_template('admin.html')
 
+@app.route('/api/health', methods=['GET'])
+def health_check():
+    """Endpoint para verificar saúde do serviço"""
+    conn = get_db_connection()
+    if conn:
+        conn.close()
+        return jsonify({'status': 'ok', 'database': 'connected'})
+    return jsonify({'status': 'error', 'database': 'disconnected'}), 500
+
 @app.route('/api/produtos', methods=['GET'])
 def get_produtos():
     """Busca todos os produtos do banco"""
     try:
         conn = get_db_connection()
         if not conn:
+            print("❌ Falha na conexão com o banco para /api/produtos")
             return jsonify({'error': 'Erro de conexão com o banco'}), 500
             
         cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
@@ -75,6 +106,7 @@ def get_produtos():
         return jsonify(produtos)
     except Exception as e:
         print(f"❌ Erro ao buscar produtos: {str(e)}")
+        print(traceback.format_exc())
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/pedidos', methods=['GET'])
@@ -83,6 +115,7 @@ def get_pedidos():
     try:
         conn = get_db_connection()
         if not conn:
+            print("❌ Falha na conexão com o banco para /api/pedidos")
             return jsonify([])
             
         cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
@@ -113,6 +146,7 @@ def get_pedidos():
         return jsonify(pedidos)
     except Exception as e:
         print(f"❌ Erro ao buscar pedidos: {str(e)}")
+        print(traceback.format_exc())
         return jsonify([])
 
 @app.route('/api/pedido/<int:id>', methods=['GET'])
@@ -159,14 +193,12 @@ def atualizar_pedido(id):
             
         cur = conn.cursor()
         
-        # Verificar se o pedido existe
         cur.execute("SELECT id FROM pedidos WHERE id = %s", (id,))
         if not cur.fetchone():
             cur.close()
             conn.close()
             return jsonify({'error': 'Pedido não encontrado'}), 404
         
-        # Atualizar campos
         campos = []
         valores = []
         
@@ -215,7 +247,6 @@ def deletar_pedido(id):
             
         cur = conn.cursor()
         
-        # Verificar se o pedido existe
         cur.execute("SELECT id FROM pedidos WHERE id = %s", (id,))
         if not cur.fetchone():
             cur.close()
@@ -274,7 +305,8 @@ def get_dashboard_stats():
     try:
         conn = get_db_connection()
         if not conn:
-            return jsonify({'error': 'Erro de conexão'}), 500
+            print("❌ Falha na conexão com o banco para /api/dashboard/stats")
+            return jsonify({'error': 'Erro de conexão com o banco'}), 500
             
         cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         
@@ -382,34 +414,8 @@ def get_dashboard_stats():
         
     except Exception as e:
         print(f"❌ Erro no dashboard: {str(e)}")
-        import traceback
-        traceback.print_exc()
+        print(traceback.format_exc())
         return jsonify({'error': str(e)}), 500
-
-@app.route('/api/whatsapp', methods=['GET'])
-def get_whatsapp():
-    """Busca o número do WhatsApp configurado"""
-    try:
-        conn = get_db_connection()
-        if not conn:
-            return jsonify({'success': False, 'whatsapp': '5581995248272'})
-            
-        cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-        cur.execute("""
-            SELECT whatsapp FROM numero 
-            WHERE ativo = true 
-            LIMIT 1
-        """)
-        resultado = cur.fetchone()
-        cur.close()
-        conn.close()
-        
-        if resultado:
-            return jsonify({'success': True, 'whatsapp': resultado['whatsapp']})
-        return jsonify({'success': False, 'whatsapp': '5581995248272'})
-    except Exception as e:
-        print(f"❌ Erro ao buscar WhatsApp: {str(e)}")
-        return jsonify({'success': False, 'whatsapp': '5581995248272'})
 
 @app.route('/api/pedidos', methods=['POST'])
 def criar_pedido():
@@ -447,6 +453,31 @@ def criar_pedido():
     except Exception as e:
         print(f"❌ Erro ao criar pedido: {str(e)}")
         return jsonify({'error': str(e)}), 500
+
+@app.route('/api/whatsapp', methods=['GET'])
+def get_whatsapp():
+    """Busca o número do WhatsApp configurado"""
+    try:
+        conn = get_db_connection()
+        if not conn:
+            return jsonify({'success': False, 'whatsapp': '5581995248272'})
+            
+        cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        cur.execute("""
+            SELECT whatsapp FROM numero 
+            WHERE ativo = true 
+            LIMIT 1
+        """)
+        resultado = cur.fetchone()
+        cur.close()
+        conn.close()
+        
+        if resultado:
+            return jsonify({'success': True, 'whatsapp': resultado['whatsapp']})
+        return jsonify({'success': False, 'whatsapp': '5581995248272'})
+    except Exception as e:
+        print(f"❌ Erro ao buscar WhatsApp: {str(e)}")
+        return jsonify({'success': False, 'whatsapp': '5581995248272'})
 
 if __name__ == '__main__':
     print("🔌 Testando conexão com o banco...")

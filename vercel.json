@@ -3,7 +3,10 @@
   "builds": [
     {
       "src": "app.py",
-      "use": "@vercel/python"
+      "use": "@vercel/python",
+      "config": {
+        "maxLambdaSize": "15mb"
+      }
     }
   ],
   "routes": [
@@ -17,6 +20,7 @@
     "DB_PORT": "5432",
     "DB_NAME": "postgres",
     "DB_USER": "postgres",
-    "DB_PASSWORD": "qcUDE8t8kxRsLDBu"
+    "DB_PASSWORD": "qcUDE8t8kxRsLDBu",
+    "DATABASE_URL": "postgresql://postgres:qcUDE8t8kxRsLDBu@db.olrswumpeunhstuwnhbu.supabase.co:5432/postgres"
   }
 }
