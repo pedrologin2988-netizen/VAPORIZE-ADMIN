@@ -11,16 +11,16 @@
   ],
   "routes": [
     {
+      "src": "/api/(.*)",
+      "dest": "app.py"
+    },
+    {
       "src": "/(.*)",
       "dest": "app.py"
     }
   ],
   "env": {
-    "DB_HOST": "db.olrswumpeunhstuwnhbu.supabase.co",
-    "DB_PORT": "5432",
-    "DB_NAME": "postgres",
-    "DB_USER": "postgres",
-    "DB_PASSWORD": "qcUDE8t8kxRsLDBu",
-    "DATABASE_URL": "postgresql://postgres:qcUDE8t8kxRsLDBu@db.olrswumpeunhstuwnhbu.supabase.co:5432/postgres"
+    "SUPABASE_URL": "https://olrswumpeunhstuwnhbu.supabase.co",
+    "SUPABASE_KEY": "sb_publishable_cmGGk2IXVEz4VB4dKkOnXA_XnX2siUU"
   }
 }
