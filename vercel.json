@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "app.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "app.py"
+    }
+  ],
+  "env": {
+    "DB_HOST": "db.olrswumpeunhstuwnhbu.supabase.co",
+    "DB_PORT": "5432",
+    "DB_NAME": "postgres",
+    "DB_USER": "postgres",
+    "DB_PASSWORD": "qcUDE8t8kxRsLDBu"
+  }
+}
