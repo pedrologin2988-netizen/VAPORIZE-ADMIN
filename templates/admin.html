@@ -25,7 +25,6 @@
             --card: #0d0d0d;
             --border: #1a1a1a;
             --primary: #e53935;
-            --primary-dark: #c62828;
             --success: #4caf50;
             --warning: #ffc107;
             --danger: #f44336;
@@ -50,6 +49,7 @@
         ::-webkit-scrollbar-track { background: var(--bg); }
         ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
         
+        /* ===== HEADER ===== */
         .header {
             display: flex;
             justify-content: space-between;
@@ -75,24 +75,6 @@
             gap: 12px;
             flex-wrap: wrap;
             align-items: center;
-        }
-        
-        .header-actions select,
-        .header-actions input {
-            background: var(--card);
-            border: 1px solid var(--border);
-            color: var(--fg);
-            padding: 10px 16px;
-            border-radius: var(--radius);
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 0.9rem;
-            min-width: 140px;
-        }
-        
-        .header-actions select:focus,
-        .header-actions input:focus {
-            outline: none;
-            border-color: var(--primary);
         }
         
         .btn {
@@ -129,6 +111,7 @@
         }
         .btn-outline:hover { background: rgba(229, 57, 53, 0.1); }
         
+        /* ===== STATS ===== */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -169,6 +152,7 @@
             margin-top: 4px;
         }
         
+        /* ===== CHARTS ===== */
         .charts-grid {
             display: grid;
             grid-template-columns: 2fr 1fr;
@@ -197,6 +181,7 @@
             max-height: 280px;
         }
         
+        /* ===== TABLES ===== */
         .table-card {
             background: var(--card);
             border: 1px solid var(--border);
@@ -220,9 +205,7 @@
             font-size: 0.9rem;
         }
         
-        thead {
-            border-bottom: 1px solid var(--border);
-        }
+        thead { border-bottom: 1px solid var(--border); }
         
         th {
             text-align: left;
@@ -236,11 +219,10 @@
         td {
             padding: 12px 16px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            vertical-align: middle;
         }
         
-        tr:hover td {
-            background: rgba(229, 57, 53, 0.05);
-        }
+        tr:hover td { background: rgba(229, 57, 53, 0.05); }
         
         .status-badge {
             display: inline-block;
@@ -256,12 +238,80 @@
         .status-badge.canceled { background: rgba(244, 67, 54, 0.2); color: var(--danger); }
         .status-badge.unknown { background: rgba(136, 136, 136, 0.2); color: var(--muted); }
         
+        /* ===== PRODUTOS - EDITAR PREÇO ===== */
+        .price-input {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--fg);
+            padding: 6px 10px;
+            width: 100px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        
+        .price-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(229, 57, 53, 0.1);
+        }
+        
+        .price-input.editing {
+            border-color: var(--warning);
+            box-shadow: 0 0 20px rgba(255, 193, 7, 0.2);
+        }
+        
         .actions-cell {
             display: flex;
             gap: 6px;
             flex-wrap: wrap;
         }
         
+        .product-img {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+        
+        .product-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .product-cell .info { display: flex; flex-direction: column; }
+        .product-cell .info .nome { font-weight: 600; }
+        .product-cell .info .marca { font-size: 0.8rem; color: var(--muted); }
+        
+        /* ===== SEARCH ===== */
+        .search-box {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .search-box input {
+            flex: 1;
+            min-width: 200px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--fg);
+            padding: 10px 16px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.9rem;
+        }
+        
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        /* ===== LOADING ===== */
         .loading-overlay {
             display: none;
             position: fixed;
@@ -293,6 +343,30 @@
             color: var(--muted);
         }
         
+        /* ===== TOAST ===== */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 16px 24px;
+            border-radius: var(--radius);
+            color: #fff;
+            font-weight: bold;
+            z-index: 2000;
+            animation: slideIn 0.3s ease;
+            max-width: 400px;
+        }
+        
+        .toast.success { background: var(--success); }
+        .toast.error { background: var(--danger); }
+        .toast.info { background: var(--primary); }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        /* ===== EMPTY STATE ===== */
         .empty-state {
             text-align: center;
             padding: 40px;
@@ -305,91 +379,7 @@
             margin-bottom: 1rem;
         }
         
-        /* MODAL */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        
-        .modal-overlay.active { display: flex; }
-        
-        .modal {
-            background: var(--card);
-            border: 2px solid var(--primary);
-            border-radius: var(--radius);
-            padding: 2rem;
-            max-width: 600px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-        
-        .modal-header h3 {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.5rem;
-            color: var(--primary);
-        }
-        
-        .modal-close {
-            background: none;
-            border: none;
-            color: #fff;
-            font-size: 2rem;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        
-        .modal-close:hover { color: var(--primary); transform: rotate(90deg); }
-        
-        .modal label {
-            display: block;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--muted);
-            margin-bottom: 4px;
-        }
-        
-        .modal input, .modal textarea, .modal select {
-            width: 100%;
-            padding: 0.75rem;
-            margin-bottom: 1rem;
-            background: #111;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            color: #fff;
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 1rem;
-        }
-        
-        .modal input:focus, .modal textarea:focus, .modal select:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-        
-        .modal .btn { width: 100%; margin-top: 0.5rem; }
-        
-        .text-truncate {
-            max-width: 150px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            display: inline-block;
-        }
-        
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 1024px) {
             .charts-grid { grid-template-columns: 1fr; }
         }
@@ -401,7 +391,7 @@
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
             .stat-card .value { font-size: 1.5rem; }
             .header h1 { font-size: 1.8rem; }
-            .modal { padding: 1.5rem; }
+            .price-input { width: 80px; }
         }
         
         @media (max-width: 480px) {
@@ -410,6 +400,8 @@
             .header-actions select, .header-actions input, .header-actions button { width: 100%; }
             .actions-cell { flex-direction: column; }
             .actions-cell .btn { width: 100%; justify-content: center; }
+            .search-box { flex-direction: column; }
+            .search-box input { width: 100%; }
         }
     </style>
 </head>
@@ -418,7 +410,7 @@
     <div class="container">
         <!-- HEADER -->
         <header class="header">
-            <h1>VAPORIZE <span>📊 Admin</span></h1>
+            <h1>VAPORIZE <span>⚙️ Admin</span></h1>
             <div class="header-actions">
                 <select id="filterPeriod">
                     <option value="7">Últimos 7 dias</option>
@@ -494,9 +486,20 @@
             </div>
         </section>
 
-        <!-- TODOS OS PRODUTOS -->
+        <!-- GERENCIAR PRODUTOS - EDITAR PREÇO -->
         <section class="table-card">
-            <h3>📦 Análise de Produtos</h3>
+            <h3><i class="fas fa-edit"></i> Gerenciar Produtos - Editar Preços</h3>
+            
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="🔍 Buscar produto por nome ou marca..." oninput="filtrarProdutos()">
+                <button class="btn btn-outline btn-sm" onclick="limparBusca()">
+                    <i class="fas fa-times"></i> Limpar
+                </button>
+                <button class="btn btn-success btn-sm" onclick="salvarTodasAlteracoes()">
+                    <i class="fas fa-save"></i> Salvar Todos
+                </button>
+            </div>
+            
             <div id="productsTable">
                 <div class="empty-state">
                     <i class="fas fa-spinner fa-spin"></i>
@@ -506,75 +509,23 @@
         </section>
     </div>
 
-    <!-- MODAL EDITAR -->
-    <div class="modal-overlay" id="editModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3><i class="fas fa-edit"></i> Editar Pedido</h3>
-                <button class="modal-close" onclick="fecharModal('editModal')">&times;</button>
-            </div>
-            <form id="editForm">
-                <input type="hidden" id="editId">
-                <label>Cliente</label>
-                <input type="text" id="editCliente" required>
-                <label>Telefone</label>
-                <input type="text" id="editTelefone" required>
-                <label>Endereço</label>
-                <textarea id="editEndereco" rows="2"></textarea>
-                <label>Total</label>
-                <input type="number" id="editTotal" step="0.01" required>
-                <label>Status</label>
-                <select id="editStatus">
-                    <option value="pendente">⏳ Pendente</option>
-                    <option value="sucesso">✅ Sucesso</option>
-                    <option value="cancelado">❌ Cancelado</option>
-                </select>
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save"></i> Salvar Alterações
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- MODAL CONFIRMAR DELETAR -->
-    <div class="modal-overlay" id="deleteModal">
-        <div class="modal" style="max-width:400px;">
-            <div class="modal-header">
-                <h3 style="color:var(--danger);"><i class="fas fa-trash"></i> Confirmar Exclusão</h3>
-                <button class="modal-close" onclick="fecharModal('deleteModal')">&times;</button>
-            </div>
-            <p style="color:var(--muted);margin-bottom:1.5rem;font-size:1.1rem;">
-                Tem certeza que deseja <strong style="color:var(--danger);">excluir</strong> o pedido <strong id="deleteIdDisplay">#</strong>?
-            </p>
-            <p style="color:var(--muted);margin-bottom:1.5rem;font-size:0.9rem;">
-                Esta ação não pode ser desfeita!
-            </p>
-            <div style="display:flex;gap:1rem;">
-                <button class="btn btn-danger" id="confirmDeleteBtn" style="flex:1;">
-                    <i class="fas fa-trash"></i> Sim, Excluir
-                </button>
-                <button class="btn btn-outline" onclick="fecharModal('deleteModal')" style="flex:1;">
-                    Cancelar
-                </button>
-            </div>
-        </div>
-    </div>
-
     <!-- LOADING -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="spinner"></div>
-        <p>⏳ Carregando dados...</p>
+        <p>⏳ Salvando alterações...</p>
     </div>
 
     <script>
         // ============================================================
-        //  VARIÁVEIS GLOBAIS
+        //  VARIÁVEIS
         // ============================================================
         let todosPedidos = [];
         let todosProdutos = [];
         let vendasChart = null;
         let produtosChart = null;
         let dadosCompletos = null;
+        let alteracoes = {};
+        let timeoutBusca = null;
 
         // ============================================================
         //  CARREGAR DADOS
@@ -582,28 +533,28 @@
         async function carregarDados() {
             showLoading(true);
             try {
-                const [statsRes, produtosRes] = await Promise.all([
+                const [statsRes, produtosRes, pedidosRes] = await Promise.all([
                     fetch('/api/dashboard/stats'),
-                    fetch('/api/produtos')
+                    fetch('/api/produtos'),
+                    fetch('/api/pedidos')
                 ]);
                 
                 dadosCompletos = await statsRes.json();
                 todosProdutos = await produtosRes.json();
+                todosPedidos = await pedidosRes.json();
                 
                 if (!dadosCompletos || dadosCompletos.error) {
                     throw new Error(dadosCompletos?.error || 'Erro ao carregar dados');
                 }
                 
                 if (!Array.isArray(todosProdutos)) todosProdutos = [];
+                if (!Array.isArray(todosPedidos)) todosPedidos = [];
                 
-                // Buscar todos os pedidos para o modal de edição
-                const pedidosRes = await fetch('/api/pedidos');
-                todosPedidos = await pedidosRes.json();
-                
+                alteracoes = {};
                 atualizarDashboard();
             } catch (error) {
                 console.error('Erro:', error);
-                alert('❌ Erro ao carregar dados: ' + error.message);
+                mostrarToast('❌ Erro ao carregar dados: ' + error.message, 'error');
             }
             showLoading(false);
         }
@@ -643,7 +594,7 @@
             
             const ultimosPedidos = stats.ultimos_pedidos || [];
             atualizarPedidosRecentes(ultimosPedidos);
-            atualizarTabelaProdutos(todosProdutos);
+            renderizarTabelaProdutos();
         }
 
         // ============================================================
@@ -710,7 +661,7 @@
         }
 
         // ============================================================
-        //  TABELA - PEDIDOS RECENTES (com botões Editar/Apagar)
+        //  TABELA - PEDIDOS RECENTES
         // ============================================================
         function atualizarPedidosRecentes(pedidos) {
             const container = document.getElementById('recentOrders');
@@ -736,17 +687,15 @@
                             <th>Total</th>
                             <th>Status</th>
                             <th>Data</th>
-                            <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
             `;
             
-            pedidos.forEach(p => {
+            pedidos.slice(0, 10).forEach(p => {
                 const statusClass = p.status === 'sucesso' ? 'success' : 
                                    p.status === 'cancelado' ? 'canceled' : 
                                    p.status === 'pendente' ? 'pending' : 'unknown';
-                const statusLabel = p.status || 'pendente';
                 
                 let produtosTexto = '-';
                 if (p.produtos) {
@@ -754,14 +703,11 @@
                         const parsed = typeof p.produtos === 'string' ? JSON.parse(p.produtos) : p.produtos;
                         if (Array.isArray(parsed) && parsed.length > 0) {
                             produtosTexto = parsed.map(item => item.nome || 'Produto').join(', ');
-                        } else if (typeof parsed === 'object' && parsed.nome) {
-                            produtosTexto = parsed.nome;
                         }
                     } catch (e) {}
                 }
                 
                 const total = parseFloat(p.total) || 0;
-                
                 let data = '-';
                 if (p.created_at) {
                     try {
@@ -770,28 +716,15 @@
                     } catch (e) {}
                 }
                 
-                const cliente = p.nome_cliente || 'Anônimo';
-                const telefone = p.telefone || '-';
-                
                 html += `
                     <tr>
                         <td>#${p.id}</td>
-                        <td>${cliente}</td>
-                        <td>${telefone}</td>
-                        <td><span class="text-truncate" title="${produtosTexto}">${produtosTexto}</span></td>
+                        <td>${p.nome_cliente || 'Anônimo'}</td>
+                        <td>${p.telefone || '-'}</td>
+                        <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${produtosTexto}</td>
                         <td>R$ ${total.toFixed(2)}</td>
-                        <td><span class="status-badge ${statusClass}">${statusLabel}</span></td>
+                        <td><span class="status-badge ${statusClass}">${p.status || 'pendente'}</span></td>
                         <td>${data}</td>
-                        <td>
-                            <div class="actions-cell">
-                                <button class="btn btn-warning btn-xs" onclick="abrirEditar(${p.id})">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="btn btn-danger btn-xs" onclick="abrirDeletar(${p.id})">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </td>
                     </tr>
                 `;
             });
@@ -801,16 +734,35 @@
         }
 
         // ============================================================
-        //  TABELA - PRODUTOS
+        //  TABELA - PRODUTOS (com edição de preço)
         // ============================================================
-        function atualizarTabelaProdutos(produtos) {
+        function renderizarTabelaProdutos() {
             const container = document.getElementById('productsTable');
+            const search = document.getElementById('searchInput').value.toLowerCase();
             
-            if (!produtos || produtos.length === 0) {
+            let filtrados = todosProdutos;
+            if (search) {
+                filtrados = todosProdutos.filter(p => 
+                    p.nome.toLowerCase().includes(search) || 
+                    (p.marca && p.marca.toLowerCase().includes(search))
+                );
+            }
+            
+            if (!todosProdutos || todosProdutos.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
                         <i class="fas fa-box-open"></i>
                         <p>Nenhum produto cadastrado</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            if (filtrados.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-search"></i>
+                        <p>Nenhum produto encontrado com a busca</p>
                     </div>
                 `;
                 return;
@@ -841,157 +793,237 @@
                         <tr>
                             <th>Produto</th>
                             <th>Marca</th>
-                            <th>Preço</th>
+                            <th>Puffs</th>
+                            <th>Preço Atual</th>
+                            <th>Novo Preço</th>
                             <th>Vendas</th>
-                            <th>Faturamento</th>
-                            <th>Status</th>
+                            <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
             `;
             
-            produtos.forEach(prod => {
+            filtrados.forEach(prod => {
+                const precoAtual = Number(prod.preco).toFixed(2);
+                const novoPreco = alteracoes[prod.id] !== undefined ? alteracoes[prod.id] : prod.preco;
+                const temAlteracao = alteracoes[prod.id] !== undefined && alteracoes[prod.id] !== prod.preco;
                 const vendas = vendasProduto[prod.nome] || 0;
-                const faturamento = vendas * (parseFloat(prod.preco) || 0);
-                const statusClass = vendas > 0 ? 'success' : 'pending';
-                const statusLabel = vendas > 0 ? '✅ Ativo' : '⏳ Sem vendas';
-                
-                const imagem = prod.imagem || 'https://placehold.co/40x40/1a1a1a/e53935?text=V';
+                const puffsText = prod.puffs ? formatarPuffs(prod.puffs) : '-';
                 
                 html += `
                     <tr>
                         <td>
-                            <div style="display:flex;align-items:center;gap:10px;">
-                                <img src="${imagem}" 
-                                     alt="${prod.nome}"
-                                     style="width:40px;height:40px;object-fit:cover;border-radius:8px;border:1px solid var(--border);"
+                            <div class="product-cell">
+                                <img src="${prod.imagem || 'https://placehold.co/40x40/1a1a1a/e53935?text=V'}" 
+                                     alt="${prod.nome}" 
+                                     class="product-img"
                                      onerror="this.src='https://placehold.co/40x40/1a1a1a/e53935?text=V'">
-                                ${prod.nome}
+                                <div class="info">
+                                    <span class="nome">${prod.nome}</span>
+                                </div>
                             </div>
                         </td>
                         <td>${prod.marca || 'VAPORIZE'}</td>
-                        <td>R$ ${parseFloat(prod.preco).toFixed(2)}</td>
+                        <td>${puffsText}</td>
+                        <td style="color:var(--muted);">R$ ${precoAtual}</td>
+                        <td>
+                            <input type="number" 
+                                   class="price-input ${temAlteracao ? 'editing' : ''}"
+                                   value="${novoPreco}"
+                                   step="0.01"
+                                   min="0"
+                                   data-id="${prod.id}"
+                                   onchange="onPrecoChange(${prod.id}, this.value)"
+                                   oninput="onPrecoInput(${prod.id}, this.value)">
+                        </td>
                         <td>${vendas}</td>
-                        <td>R$ ${faturamento.toFixed(2)}</td>
-                        <td><span class="status-badge ${statusClass}">${statusLabel}</span></td>
+                        <td>
+                            <div class="actions-cell">
+                                ${temAlteracao ? `<button class="btn btn-success btn-xs" onclick="salvarAlteracao(${prod.id})">
+                                    <i class="fas fa-check"></i>
+                                </button>` : ''}
+                                ${temAlteracao ? `<button class="btn btn-danger btn-xs" onclick="cancelarAlteracao(${prod.id})">
+                                    <i class="fas fa-undo"></i>
+                                </button>` : ''}
+                            </div>
+                        </td>
                     </tr>
                 `;
             });
             
-            html += `</tbody></table>`;
+            html += `
+                    </tbody>
+                </table>
+                <p style="text-align:center;color:var(--muted);margin-top:12px;font-size:0.85rem;">
+                    Mostrando ${filtrados.length} de ${todosProdutos.length} produtos
+                    ${Object.keys(alteracoes).length > 0 ? ` | <span style="color:var(--warning);">${Object.keys(alteracoes).length} alterações pendentes</span>` : ''}
+                </p>
+            `;
+            
             container.innerHTML = html;
         }
 
+        function formatarPuffs(valor) {
+            if (!valor) return '-';
+            if (valor >= 1000) return (valor / 1000) + 'k';
+            return valor;
+        }
+
         // ============================================================
-        //  EDITAR PEDIDO
+        //  FUNÇÕES DE PREÇO
         // ============================================================
-        function abrirEditar(id) {
-            const pedido = todosPedidos.find(p => p.id === id);
-            if (!pedido) {
-                alert('Pedido não encontrado');
+        function onPrecoInput(id, valor) {
+            const numValor = parseFloat(valor);
+            if (isNaN(numValor) || numValor < 0) return;
+            
+            const produto = todosProdutos.find(p => p.id === id);
+            if (!produto) return;
+            
+            if (numValor !== produto.preco) {
+                alteracoes[id] = numValor;
+            } else {
+                delete alteracoes[id];
+            }
+            
+            const input = document.querySelector(`.price-input[data-id="${id}"]`);
+            if (input) {
+                input.classList.toggle('editing', alteracoes[id] !== undefined);
+            }
+            
+            renderizarTabelaProdutos();
+        }
+        
+        function onPrecoChange(id, valor) {}
+
+        function cancelarAlteracao(id) {
+            delete alteracoes[id];
+            renderizarTabelaProdutos();
+            mostrarToast('🔄 Alteração cancelada', 'info');
+        }
+
+        // ============================================================
+        //  SALVAR ALTERAÇÕES
+        // ============================================================
+        async function salvarAlteracao(id) {
+            if (alteracoes[id] === undefined) {
+                mostrarToast('⚠️ Nenhuma alteração para salvar', 'info');
                 return;
             }
             
-            document.getElementById('editId').value = id;
-            document.getElementById('editCliente').value = pedido.nome_cliente || '';
-            document.getElementById('editTelefone').value = pedido.telefone || '';
-            document.getElementById('editEndereco').value = pedido.endereco || '';
-            document.getElementById('editTotal').value = pedido.total || 0;
-            document.getElementById('editStatus').value = pedido.status || 'pendente';
+            const novoPreco = alteracoes[id];
+            const produto = todosProdutos.find(p => p.id === id);
             
-            document.getElementById('editModal').classList.add('active');
-        }
-
-        document.getElementById('editForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
+            if (!produto) {
+                mostrarToast('❌ Produto não encontrado', 'error');
+                return;
+            }
             
-            const id = document.getElementById('editId').value;
-            const dados = {
-                nome_cliente: document.getElementById('editCliente').value,
-                telefone: document.getElementById('editTelefone').value,
-                endereco: document.getElementById('editEndereco').value,
-                total: parseFloat(document.getElementById('editTotal').value),
-                status: document.getElementById('editStatus').value
-            };
+            showLoading(true);
             
             try {
-                showLoading(true);
-                const response = await fetch(`/api/pedido/${id}`, {
+                const response = await fetch(`/api/produto/${id}/preco`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(dados)
+                    body: JSON.stringify({ preco: novoPreco })
                 });
                 
                 const result = await response.json();
                 
                 if (result.success) {
-                    alert('✅ Pedido atualizado com sucesso!');
-                    fecharModal('editModal');
-                    carregarDados();
+                    produto.preco = novoPreco;
+                    delete alteracoes[id];
+                    mostrarToast(`✅ Preço de ${produto.nome} atualizado para R$ ${novoPreco.toFixed(2)}`, 'success');
+                    renderizarTabelaProdutos();
                 } else {
-                    alert('❌ Erro: ' + (result.error || 'Erro ao atualizar'));
+                    mostrarToast(`❌ Erro: ${result.error || 'Falha ao salvar'}`, 'error');
                 }
             } catch (error) {
-                alert('❌ Erro: ' + error.message);
+                console.error('Erro:', error);
+                mostrarToast('❌ Erro ao salvar alteração', 'error');
             }
+            
             showLoading(false);
-        });
-
-        // ============================================================
-        //  DELETAR PEDIDO
-        // ============================================================
-        let deletarId = null;
-
-        function abrirDeletar(id) {
-            deletarId = id;
-            document.getElementById('deleteIdDisplay').textContent = `#${id}`;
-            document.getElementById('deleteModal').classList.add('active');
         }
 
-        document.getElementById('confirmDeleteBtn').addEventListener('click', async () => {
-            if (!deletarId) return;
-            
-            try {
-                showLoading(true);
-                const response = await fetch(`/api/pedido/${deletarId}`, {
-                    method: 'DELETE'
-                });
-                
-                const result = await response.json();
-                
-                if (result.success) {
-                    alert('✅ Pedido excluído com sucesso!');
-                    fecharModal('deleteModal');
-                    deletarId = null;
-                    carregarDados();
-                } else {
-                    alert('❌ Erro: ' + (result.error || 'Erro ao excluir'));
-                }
-            } catch (error) {
-                alert('❌ Erro: ' + error.message);
+        async function salvarTodasAlteracoes() {
+            const ids = Object.keys(alteracoes);
+            if (ids.length === 0) {
+                mostrarToast('⚠️ Nenhuma alteração pendente', 'info');
+                return;
             }
+            
+            if (!confirm(`Deseja salvar ${ids.length} alterações de preço?`)) return;
+            
+            showLoading(true);
+            let sucessos = 0;
+            let erros = 0;
+            
+            for (const id of ids) {
+                try {
+                    const novoPreco = alteracoes[id];
+                    const response = await fetch(`/api/produto/${id}/preco`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ preco: novoPreco })
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        const produto = todosProdutos.find(p => p.id === Number(id));
+                        if (produto) produto.preco = novoPreco;
+                        sucessos++;
+                    } else {
+                        erros++;
+                    }
+                } catch (error) {
+                    erros++;
+                }
+            }
+            
+            alteracoes = {};
+            renderizarTabelaProdutos();
             showLoading(false);
-        });
+            
+            if (erros === 0) {
+                mostrarToast(`✅ ${sucessos} produtos atualizados com sucesso!`, 'success');
+            } else {
+                mostrarToast(`⚠️ ${sucessos} atualizados, ${erros} falhas`, 'error');
+            }
+        }
 
         // ============================================================
-        //  UTILITÁRIOS
+        //  FILTROS
         // ============================================================
-        function fecharModal(id) {
-            document.getElementById(id).classList.remove('active');
+        function filtrarProdutos() {
+            if (timeoutBusca) clearTimeout(timeoutBusca);
+            timeoutBusca = setTimeout(() => renderizarTabelaProdutos(), 300);
+        }
+
+        function limparBusca() {
+            document.getElementById('searchInput').value = '';
+            renderizarTabelaProdutos();
+        }
+
+        // ============================================================
+        //  TOAST / LOADING
+        // ============================================================
+        function mostrarToast(mensagem, tipo = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${tipo}`;
+            toast.textContent = mensagem;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.3s';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
         }
 
         function showLoading(active) {
             document.getElementById('loadingOverlay').classList.toggle('active', active);
         }
-
-        // Fechar modais clicando fora
-        document.querySelectorAll('.modal-overlay').forEach(modal => {
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    modal.classList.remove('active');
-                }
-            });
-        });
 
         // ============================================================
         //  EXPORTAR CSV
@@ -1002,7 +1034,7 @@
                 const pedidos = await response.json();
                 
                 if (!pedidos || pedidos.length === 0) {
-                    alert('📭 Nenhum dado para exportar');
+                    mostrarToast('📭 Nenhum dado para exportar', 'info');
                     return;
                 }
                 
@@ -1044,9 +1076,10 @@
                 a.click();
                 URL.revokeObjectURL(url);
                 
+                mostrarToast('✅ CSV exportado com sucesso!', 'success');
             } catch (error) {
                 console.error('Erro ao exportar:', error);
-                alert('❌ Erro ao exportar dados');
+                mostrarToast('❌ Erro ao exportar dados', 'error');
             }
         }
 
