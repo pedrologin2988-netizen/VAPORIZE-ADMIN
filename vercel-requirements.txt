@@ -1,5 +1,26 @@
-Flask==2.3.3
-Flask-CORS==4.0.0
-psycopg2-binary==2.9.9
-python-dotenv==1.0.0
-requests==2.31.0
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "app.py",
+      "use": "@vercel/python",
+      "config": {
+        "maxLambdaSize": "15mb"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "app.py"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "app.py"
+    }
+  ],
+  "env": {
+    "SUPABASE_URL": "https://olrswumpeunhstuwnhbu.supabase.co",
+    "SUPABASE_KEY": "sb_publishable_cmGGk2IXVEz4VB4dKkOnXA_XnX2siUU"
+  }
+}
