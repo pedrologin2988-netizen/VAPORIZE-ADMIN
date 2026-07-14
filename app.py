@@ -9,8 +9,9 @@ import traceback
 app = Flask(__name__, template_folder='templates')
 CORS(app)
 
-SUPABASE_URL = os.environ.get("SUPABASE_URL", "https://olrswumpeunhstuwnhbu.supabase.co")
-SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "sb_publishable_cmGGk2IXVEz4VB4dKkOnXA_XnX2siUU")
+# ==================== NOVA CONFIGURAÇÃO SUPABASE ====================
+SUPABASE_URL = "https://htnqtolrgpnruxhmtfsl.supabase.co"
+SUPABASE_KEY = "sb_secret_PzH80X6g4FKnFmxsXW5fBQ_gfzFr-ZI"
 
 headers = {
     "apikey": SUPABASE_KEY,
